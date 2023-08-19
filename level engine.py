@@ -93,7 +93,7 @@ def draw_world():
 					#ouro
 					img = pygame.transform.scale(ouro, (tile_size, tile_size // 2))
 					tela.blit(img, (col * tile_size, row * tile_size + (tile_size // 2)))
-                #elif  5 <= valor < ?(numero de sprites) :
+                		#elif  5 <= valor < ?(numero de sprites) :
 					#gatinho
 				#	img = pygame.transform.scale(frames[valor], (tile_size, tile_size))
 				#	tela.blit(img, (col * tile_size, row * tile_size + (tile_size))
