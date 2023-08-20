@@ -1,28 +1,63 @@
 import sys
 import pygame
 
+from script.entidades import Physic
+
 class Jogo:
     def __init__(self):
-
         pygame.init()
         #definição do nome e resolução
         pygame.display.set_caption('FIELLI')
         self.screen = pygame.display.set_mode((1024, 768))
+        self.display = pygame.Surface((320, 240))
+
+        self.clock = pygame.time.Clock()
+
         #definição do icone do executável
         icon = pygame.image.load('icon.png')
         pygame.display.set_icon(icon)
 
-        self.clock = pygame.time.Clock()
+        #aqui estão as definições do objeto do personagem
+        self.img = pygame.image.load('datagame/sprites/fiellibase1.png')
+        self.img.set_colorkey((0, 0, 0))
+        self.img_pos = [160, 260]
+        self.movimento = [False, False]
+
+        self.assets = {
+            'jogador': pygame.image.load('datagame/sprites/fiellibase1.png')
+        }
+        #aqui as definições do objeto de colisão:
+        self.colissao_area = pygame.Rect(50, 50, 300, 50)
+
+        self.player = Physic(self, 'player', (50, 50), (1, 1))
+
 
     def run(self):
-        #definir abrir e fechar o executável
         while True:
+            self.display.fill((14, 219, 248))
+
+            self.player.uptade((self.movimento[1] - self.movimento[0], 0))
+            self.player.render_1(self.display)
+
+            # definição da abertura e fechamento do executável
             for evento in pygame.event.get():
                 if evento.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-            #definir a atualização em frames (60fps)
+
+                if evento.type == pygame.KEYDOWN:
+                    if evento.key == pygame.K_UP:
+                        self.movimento[0] = True
+                    if evento.key == pygame.K_DOWN:
+                        self.movimento[1] = True
+                if evento.type == pygame.KEYUP:
+                    if evento.key == pygame.K_UP:
+                        self.movimento[0] = False
+                    if evento.key == pygame.K_DOWN:
+                        self.movimento[1] = False
+
+            self.screen.blit(pygame.transform.scale(self.display, self.screen.get_size()), (0, 0))
             pygame.display.update()
             self.clock.tick(60)
-#retornar o jogo "rodando":
+
 Jogo().run()
