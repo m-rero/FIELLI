@@ -1,5 +1,7 @@
 import pygame
 
+import os
+
 class Physic:
      # definimos: jogo(a quem será incrementado), tipo de funções, posições, tamanhos e velocidades
     def __init__(self, game, e_type, pos, size):

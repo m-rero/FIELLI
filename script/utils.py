@@ -1,6 +1,6 @@
 import pygame
 
-BASE_IMG_PATH = 'datagame/sprites'
+BASE_IMG_PATH = 'projetofielli_ilmoruuu/datagame/sprites'
 
 def load_image(path):
     img = pygame.image.load(BASE_IMG_PATH + path).convert()
