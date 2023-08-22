@@ -28,6 +28,11 @@ pygame.display.set_icon(icon)
 bg_img = pygame.image.load('img/nivel1.png')
 bg_img_resize = pygame.transform.scale(bg_img,(tela_largura, tela_comprimento))
 
+#music begin
+pygame.mixer.init()
+pygame.mixer.music.load('sons/intro.mp3')
+pygame.mixer.music.set_volume(0.5)
+pygame.mixer.music.play(-1)
 
 def reset_level(level):
 	player.reset(100, tela_comprimento - 130)
@@ -233,5 +238,9 @@ while run:
 			run = False
 			
 	pygame.display.update()
+ 
+#music stop
+pygame.mixer.music.stop()
+pygame.mixer.quit()
 
 pygame.quit()
