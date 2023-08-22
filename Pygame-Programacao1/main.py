@@ -132,7 +132,7 @@ class Player():
 		for _ in range(1, 6):
 			frames.append(pygame.transform.scale(pygame.image.load(f'img/gato/spritesfielli/{_}.png'), (5 * player_scale, 8 * player_scale)))
 		img = frames[0]
-		self.image = pygame.transform.scale(img, (40, 80))
+		self.image = pygame.transform.scale(img, (80, 80))
 		self.rect = self.image.get_rect()
 		self.rect.x = x
 		self.rect.y = y
