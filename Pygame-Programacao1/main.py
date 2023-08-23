@@ -33,6 +33,8 @@ pygame.mixer.init()
 pygame.mixer.music.load('sons/intro.mp3')
 pygame.mixer.music.set_volume(0.5)
 pygame.mixer.music.play(-1)
+#sons
+pulo = pygame.mixer.Sound('sons/cat.mp3')
 
 def reset_level(level):
 	player.reset(100, tela_comprimento - 130)
@@ -172,6 +174,8 @@ class Player():
 		# Lógica de pulo
 		if self.on_ground and teclas[pygame.K_SPACE]:
 			self.vel_y = self.jump_power
+			pulo.play()
+		
 
 		#gravidade
 		self.vel_y += 1
@@ -246,4 +250,3 @@ pygame.mixer.music.stop()
 pygame.mixer.quit()
 
 pygame.quit()
-
