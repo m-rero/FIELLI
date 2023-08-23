@@ -146,7 +146,8 @@ class Player():
 		self.vel_y = 0
 		self.velocidade_x = 5
 		self.pulando = False
-		
+		self.on_ground = False
+		self.jump_power = -15
 
 	def update(self):
 		dx = 0
@@ -154,19 +155,23 @@ class Player():
 
 		# Captura as teclas pressionadas
 		teclas = pygame.key.get_pressed()
-		
+
+		# Verificar colisão com o solo (plataformas)
+		self.on_ground = False
+		for tile in world.tile_list:
+			if tile[1].colliderect(self.rect.x, self.rect.y + 1, self.largura, self.altura):
+				self.on_ground = True
+				break
+
 		# Move o gato com base nas teclas pressionadas
 		if teclas[pygame.K_LEFT]:
 			dx -= self.velocidade_x
 		if teclas[pygame.K_RIGHT]:
 			dx += self.velocidade_x
-			
+
 		# Lógica de pulo
-		if not self.pulando and teclas[pygame.K_SPACE]:  # Pressionar a barra de espaço para pular
-			self.pulando = True
-			self.vel_y = -15
-		if teclas[pygame.K_SPACE] == False:
-			self.pulando = False
+		if self.on_ground and teclas[pygame.K_SPACE]:
+			self.vel_y = self.jump_power
 
 		#gravidade
 		self.vel_y += 1
@@ -189,7 +194,6 @@ class Player():
 					dy = tile[1].top - self.rect.bottom
 					self.vel_y = 0
 				
-
 		#atualizar coordenadas do jogador
 		self.rect.x += dx
 		self.rect.y += dy
@@ -205,11 +209,9 @@ class Player():
 			self.rect.y = 0
 		elif self.rect.y > tela_comprimento - self.altura:
 			self.rect.y = tela_comprimento - self.altura
-   
 
 		#desenhar jogador na tela
 		tela.blit(self.image, self.rect)
-	 
 
 player = Player(0, 460)
 
@@ -244,3 +246,4 @@ pygame.mixer.music.stop()
 pygame.mixer.quit()
 
 pygame.quit()
+
