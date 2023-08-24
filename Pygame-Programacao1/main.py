@@ -3,9 +3,9 @@ import pickle
 from os import path
 
 pygame.init()
-# definição do nome, resolução e o display(interativo)
+# Definição do nome, resolução e o display(interativo)
 pygame.display.set_caption('FIELLI')
-#tela do jogo e configurações
+# Tela do jogo e configurações
 tile_size = 50
 fps = 60
 cols = 20
@@ -17,29 +17,30 @@ max_levels = 7
 
 tela = pygame.display.set_mode((tela_largura, tela_comprimento))
 
-# definição do clock do jogo#
+# Definição do clock do jogo
 clock = pygame.time.Clock()
 
-# definição do icone do executável
+# Definição do icone do executável
 icon = pygame.image.load('icon.png')
 pygame.display.set_icon(icon)
 
-#carregando imagens fundo 
+# Carregando imagens fundo
 bg_img = pygame.image.load('img/nivel1.png')
 bg_img_resize = pygame.transform.scale(bg_img,(tela_largura, tela_comprimento))
 
-#music begin
+# Music begin
 pygame.mixer.init()
 pygame.mixer.music.load('sons/intro.mp3')
 pygame.mixer.music.set_volume(0.5)
 pygame.mixer.music.play(-1)
-#sons
+
+#Sons
 pulo = pygame.mixer.Sound('sons/cat.mp3')
 
 def reset_level(level):
 	player.reset(100, tela_comprimento - 130)
 
-	#load in level data and create world
+	# Load in level data and create world
 	if path.exists(f'level{level}_data'):
 		pickle_in = open(f'level{level}_data', 'rb')
 		world_data = pickle.load(pickle_in)
@@ -58,10 +59,10 @@ class Button():
 	def draw(self):
 		action = False
 
-		#get mouse position
+		# Get mouse position
 		pos = pygame.mouse.get_pos()
 
-		#check mouseover and clicked conditions
+		# Check mouseover and clicked conditions
 		if self.rect.collidepoint(pos):
 			if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
 				action = True
@@ -71,7 +72,7 @@ class Button():
 			self.clicked = False
 
 
-		#draw button
+		# Draw button
 		tela.blit(self.image, self.rect)
 
 		return action
@@ -80,7 +81,7 @@ class World():
 	def __init__(self, data):
 		self.tile_list = []
 
-		#load images
+		# Load images
 		rocha = pygame.image.load('img/bloco.png')
 		plataforma = pygame.image.load('img/plaforma.jpg')
 		ouro = pygame.image.load('img/ouro.png')
@@ -98,7 +99,7 @@ class World():
 					tile = (img, img_rect)
 					self.tile_list.append(tile)
 				elif tile == 2:
-					#plataforma
+					# Plataforma
 					img = pygame.transform.scale(plataforma, (tile_size, tile_size))
 					img_rect = img.get_rect()
 					img_rect.x = col_count * tile_size
@@ -106,7 +107,7 @@ class World():
 					tile = (img, img_rect)
 					self.tile_list.append(tile)
 				elif tile == 3:
-					#fogo
+					# Fogo
 					img = pygame.transform.scale(fogo, (tile_size, tile_size))
 					img_rect = img.get_rect()
 					img_rect.x = col_count * tile_size
@@ -114,7 +115,7 @@ class World():
 					tile = (img, img_rect)
 					self.tile_list.append(tile)
 				elif tile == 4:
-					#ouro
+					# Ouro
 					img = pygame.transform.scale(ouro, (tile_size, tile_size))
 					img_rect = img.get_rect()
 					img_rect.x = col_count * tile_size
@@ -133,7 +134,7 @@ class World():
 
 class Player():
 	def __init__(self, x, y):
-		#frames do gatinho(personagem) em diversas posições
+		# Frames do gatinho(personagem) em diversas posições
 		frames = []
 		player_scale = 60
 		for _ in range(1, 6):
@@ -150,6 +151,46 @@ class Player():
 		self.pulando = False
 		self.on_ground = False
 		self.jump_power = -15
+		self.frames = []
+
+		#Dedica-se aqui apenas para a animação dos sprites:
+
+		self.frames_right = []  # Quadros de animação para a direção direita
+		self.frames_left = []  # Quadros de animação para a direção esquerda
+
+		player_scale = 60
+		for frame_number in range(3, 5):
+			frame_image = pygame.transform.scale(
+				pygame.image.load(f'img/gato/spritesfielli/{frame_number}.png'),
+				(5 * player_scale, 8 * player_scale)
+			)
+			self.frames_right.append(frame_image)
+			self.frames.append(frame_image)
+
+			self.frame_index = 0
+			self.image = pygame.transform.scale(self.frames[self.frame_index], (80, 80))
+
+			frame_image_left = pygame.transform.flip(frame_image, True, False)
+			self.frames_left.append(frame_image_left)
+
+			self.frame_index = 0
+			self.direction = "right"
+			self.image = pygame.transform.scale(self.frames_right[self.frame_index], (80, 80))
+
+		self.frames_jump_right = []  # Quadros de animação para pular a direita
+		self.frames_jump_left = []  # Quadros de animação para pular a esquerda
+		self.frames_jump_right = []  # Quadros de animação para pular a direita
+		self.frames_jump_left = []  # Quadros de animação para pular a esquerda
+
+		for frame_number in range(9, 10):  # Use os números apropriados para os frames de pulo
+			frame_image = pygame.transform.scale(
+				pygame.image.load(f'img/gato/spritesfielli/{frame_number}.png'),
+				(5 * player_scale, 8 * player_scale)
+			)
+			self.frames_jump_right.append(frame_image)
+
+			frame_image_left = pygame.transform.flip(frame_image, True, False)
+			self.frames_jump_left.append(frame_image_left)
 
 	def update(self):
 		dx = 0
@@ -175,30 +216,70 @@ class Player():
 		if self.on_ground and teclas[pygame.K_SPACE]:
 			self.vel_y = self.jump_power
 			pulo.play()
-		
+		if self.on_ground and teclas[pygame.K_SPACE]:
+			self.vel_y = self.jump_power
+			pulo.play()
+			self.pulando = True
+		else:
+			self.pulando = False
 
-		#gravidade
+		# Aqui as funcionalidades das animações:
+		if teclas[pygame.K_LEFT] or teclas[pygame.K_RIGHT]:
+			if teclas[pygame.K_LEFT]:
+				self.direction = "left"
+			else:
+				self.direction = "right"
+
+			self.frame_index += 0.2
+			if self.direction == "left":
+				frames_list = self.frames_left
+			else:
+				frames_list = self.frames_right
+
+			if self.frame_index >= len(frames_list):
+				self.frame_index = 0
+
+			self.image = pygame.transform.scale(frames_list[int(self.frame_index)], (80, 80))
+
+		if self.on_ground and teclas[pygame.K_SPACE]:
+			self.vel_y = self.jump_power
+			pulo.play()
+
+		if self.pulando:
+			if self.direction == "left":
+				frames_jump_list = self.frames_jump_left
+
+			else:
+				frames_jump_list = self.frames_jump_right
+
+			self.frame_index += 0.2
+			if self.frame_index >= len(frames_jump_list):
+				self.frame_index = 0
+
+			self.image = pygame.transform.scale(frames_jump_list[int(self.frame_index)], (80, 80))
+
+		# Gravidade
 		self.vel_y += 1
 		if self.vel_y > 10:
 			self.vel_y = 10
 		dy += self.vel_y
 
-		#checar colisão
+		# Checar colisão
 		for tile in world.tile_list:
-			#checar colisão em x | tile[1] = solo rocha
+			# Checar colisão em x | tile[1] = solo rocha
 			if tile[1].colliderect(self.rect.x + dx, self.rect.y, self.largura, self.altura):
 				dx = 0
-			#checar colisão em y
+			# Checar colisão em y
 			if tile[1].colliderect(self.rect.x, self.rect.y + dy, self.largura, self.altura):
-				#checar se está pulando
+				# Checar se está pulando
 				if self.vel_y < 0:
 					dy = tile[1].bottom - self.rect.top
-				#checar se está caindo
+				# Checar se está caindo
 				elif self.vel_y >= 0:
 					dy = tile[1].top - self.rect.bottom
 					self.vel_y = 0
 				
-		#atualizar coordenadas do jogador
+		# Atualizar coordenadas do jogador
 		self.rect.x += dx
 		self.rect.y += dy
 
@@ -214,7 +295,7 @@ class Player():
 		elif self.rect.y > tela_comprimento - self.altura:
 			self.rect.y = tela_comprimento - self.altura
 
-		#desenhar jogador na tela
+		# Desenhar jogador na tela
 		tela.blit(self.image, self.rect)
 
 player = Player(0, 460)
@@ -223,7 +304,7 @@ def reset_level(level):
 	player.reset(100, tela_comprimento - 460)
 	
 
-#carregar data nível
+# Carregar data nível
 if path.exists(f'niveis/level{level}_data'):
 	pickle_in = open(f'niveis/level{level}_data', 'rb')
 	world_data = pickle.load(pickle_in)
@@ -245,7 +326,7 @@ while run:
 			
 	pygame.display.update()
  
-#music stop
+# Music stop
 pygame.mixer.music.stop()
 pygame.mixer.quit()
 
