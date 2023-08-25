@@ -168,7 +168,7 @@ class Player():
 			self.frames.append(frame_image)
 
 			self.frame_index = 0
-			self.image = pygame.transform.scale(self.frames[self.frame_index], (80, 80))
+			self.image = pygame.transform.scale(self.frames[self.frame_index], (70, 70))
 
 			frame_image_left = pygame.transform.flip(frame_image, True, False)
 			self.frames_left.append(frame_image_left)
