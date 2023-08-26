@@ -13,7 +13,7 @@ margin = 100
 tela_largura = tile_size * cols
 tela_comprimento = (tile_size * cols) - 400 + margin
 level = 1
-max_levels = 7
+max_levels = 7  
 
 tela = pygame.display.set_mode((tela_largura, tela_comprimento))
 
@@ -23,6 +23,10 @@ clock = pygame.time.Clock()
 # Definição do icone do executável
 icon = pygame.image.load('icon.png')
 pygame.display.set_icon(icon)
+
+#barra de pontuacao
+pontuacao = 0
+font = pygame.font.Font(None, 36) 
 
 # Carregando imagens fundo
 bg_img = pygame.image.load('img/nivel1.png')
@@ -36,6 +40,7 @@ pygame.mixer.music.play(-1)
 
 #Sons
 pulo = pygame.mixer.Sound('sons/cat.mp3')
+pulo.set_volume(0.1)
 
 def reset_level(level):
 	player.reset(100, tela_comprimento - 130)
@@ -168,7 +173,7 @@ class Player():
 			self.frames.append(frame_image)
 
 			self.frame_index = 0
-			self.image = pygame.transform.scale(self.frames[self.frame_index], (70, 70))
+			self.image = pygame.transform.scale(self.frames[self.frame_index], (80, 80))
 
 			frame_image_left = pygame.transform.flip(frame_image, True, False)
 			self.frames_left.append(frame_image_left)
@@ -311,8 +316,7 @@ if path.exists(f'niveis/level{level}_data'):
 world = World(world_data)
 
 run = True
-while run:
-
+while run:       
 	clock.tick(fps)
 	
 	tela.blit(bg_img_resize, (0, 0))
@@ -322,8 +326,17 @@ while run:
 
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
-			run = False
-			
+			run = False 
+
+	#pontuacao
+	pygame.draw.rect(tela, (255, 255, 255), (880, 20, 100, 22))    
+		
+	# Renderizar o texto da pontuação
+	texto_pontuacao = font.render('peças: ' + str(pontuacao), False, (0, 0, 0))
+	tela.blit(texto_pontuacao, (882, 20)) 
+	
+	
+
 	pygame.display.update()
  
 # Music stop
