@@ -332,7 +332,7 @@ while run:
 	pygame.draw.rect(tela, (255, 255, 255), (880, 20, 100, 22))    
 		
 	# Renderizar o texto da pontuação
-	texto_pontuacao = font.render('peças: ' + str(pontuacao), False, (0, 0, 0))
+	texto_pontuacao = font.render('peças: ' + str(pontuacao), True, (0, 0, 0))
 	tela.blit(texto_pontuacao, (882, 20)) 
 	
 	
