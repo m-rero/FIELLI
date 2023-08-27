@@ -184,8 +184,6 @@ class Player():
 
 		self.frames_jump_right = []  # Quadros de animação para pular a direita
 		self.frames_jump_left = []  # Quadros de animação para pular a esquerda
-		self.frames_jump_right = []  # Quadros de animação para pular a direita
-		self.frames_jump_left = []  # Quadros de animação para pular a esquerda
 
 		for frame_number in range(9, 10):  # Use os números apropriados para os frames de pulo
 			frame_image = pygame.transform.scale(
