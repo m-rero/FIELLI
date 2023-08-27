@@ -333,8 +333,8 @@ while run:
 		
 	# Renderizar o texto da pontuação
 	fonteomori = pygame.font.Font('datagame/fontes/OMORI_GAME2.ttf', (24))
-	texto_pontuacao = fonteomori.render('componentes: ' + str(pontuacao), True, (0, 0, 0))
-	tela.blit(texto_pontuacao, (790, 23))
+	texto_pontuacao = fonteomori.render('Componentes: ' + str(pontuacao), True, (0, 0, 0))
+	tela.blit(texto_pontuacao, (790, 19))
 
 	pygame.display.update()
  
