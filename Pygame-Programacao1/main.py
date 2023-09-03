@@ -397,17 +397,18 @@ while run:
 			run = False
    
     #pontuacao
-	pygame.draw.rect(tela, (255, 255, 255), (890, 20, 100, 22))    
+	pygame.draw.rect(tela, (255, 255, 255), (890, 20, 100, 21))
     
     #renderizar o texto da pontuação
-	texto_pontuacao = font.render('peças: ' + str(pontuacao), False, (0, 0, 0))
-	tela.blit(texto_pontuacao, (892, 20))
+	fontegame = pygame.font.Font('script/fontes/OMORI-GAME2.ttf ', 25)
+	texto_pontuacao = fontegame.render('Partes: ' + str(pontuacao), False, (0, 0, 0))
+	tela.blit(texto_pontuacao, (892, 17))
  
 	# Verifique a colisão entre o jogador e as peças
 	colisoes = pygame.sprite.spritecollide(player, peca_grupo, True)
 
 	# Atualize a pontuação com base nas colisões
-	for peca in colisoes:
+	for partes in colisoes:
 		pontuacao += 1
 		click.play()
 	
