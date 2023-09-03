@@ -1,9 +1,10 @@
+#import´s
 import pygame
 import pickle
 from os import path
 
+#inicio do jogo
 pygame.init()
-# definição do nome, resolução e o display(interativo)
 pygame.display.set_caption('FIELLI')
 #tela do jogo e configurações
 tile_size = 50
@@ -14,34 +15,44 @@ tela_largura = tile_size * cols
 tela_comprimento = (tile_size * cols) - 400 + margin
 level = 2
 max_levels = 7
-
 tela = pygame.display.set_mode((tela_largura, tela_comprimento))
 
-#barra de pontuacao
+#pontuacao
 pontuacao = 0
 font = pygame.font.Font(None, 36) 
 
-# Definição do clock do jogo
+#clock do jogo
 clock = pygame.time.Clock()
 
-# Definição do icone do executável
+#icone do executável
 icon = pygame.image.load('icon.png')
 pygame.display.set_icon(icon)
 
-# Carregando imagens fundo
+#imagens##################################################
 bg_img = pygame.image.load('img/nivel1.png')
 bg_img_resize = pygame.transform.scale(bg_img,(tela_largura, tela_comprimento))
-
-# Music begin
+peca1 = pygame.image.load('img/peca1.png')
+peca1_x = 0
+peca1_y = 0
+peca2 = pygame.image.load('img/peca2.png')
+peca2_x = 0
+peca2_y = 0
+rocha = pygame.image.load('img/bloco.png')
+pecas = [peca1, peca2]
+fogo = pygame.image.load('img/fogo.png')
+		
+#musica comeca####################################
 pygame.mixer.init()
 pygame.mixer.music.load('sons/intro.mp3')
 pygame.mixer.music.set_volume(0.5)
 pygame.mixer.music.play(-1)
 
-#Sons
+#sons##########################################
 pulo = pygame.mixer.Sound('sons/cat.mp3')
+click = pygame.mixer.Sound('sons/click.mp3')
+pegar = pygame.mixer.Sound('sons/pick.mp3')
 
-
+#niveis#############################################
 def reset_level(level):
 	player.reset(100, tela_comprimento - 130)
 
@@ -52,6 +63,8 @@ def reset_level(level):
 	world = World(world_data)
 
 	return world
+
+#butoes######################################################################################################################
 
 class Button():
 	def __init__(self, x, y, image):
@@ -82,17 +95,12 @@ class Button():
 
 		return action
 
+
+#mundo#################################################################################################################
 class World():
 	def __init__(self, data):
 		self.tile_list = []
 
-		#load images
-		peca1 = pygame.image.load('img/peca1.png')
-		peca2 = pygame.image.load('img/peca2.png')
-		rocha = pygame.image.load('img/bloco.png')
-		pecas = [peca1, peca2]
-		fogo = pygame.image.load('img/fogo.png')
-		
 		row_count = 0
 		for row in data:
 			col_count = 0
@@ -135,6 +143,8 @@ class World():
 			tela.blit(tile[0], tile[1])
 			pygame.draw.rect(tela, (255, 255, 255), tile[1], 2)
 
+
+#plataforma##################################################################################################################################
 class Plataforma(pygame.sprite.Sprite):
 	#definindo variáveis
 	def __init__(self, x, y, mover_x, mover_y):
@@ -163,6 +173,8 @@ class Plataforma(pygame.sprite.Sprite):
 			self.mover_direcao *= -1
 			self.mover_contra *= -1
 
+
+#peca##############################################################################################################################
 class Peca(pygame.sprite.Sprite):
 	#definindo variáveis
 	def __init__(self, x, y):
@@ -173,6 +185,8 @@ class Peca(pygame.sprite.Sprite):
 			self.rect = self.image.get_rect()
 			self.rect.center = (x, y)
 
+
+#jogador###########################################################################################################################
 class Player():
 	def __init__(self, x, y):
 		self.reset(x, y)
@@ -356,12 +370,14 @@ def reset_level(level):
 	player.reset(100, tela_comprimento - 460)
 	
 
-#carregar data nível
+#carregar data nível#########################################################################################################
+
 if path.exists(f'niveis/level{level}_data'):
 	pickle_in = open(f'niveis/level{level}_data', 'rb')
 	world_data = pickle.load(pickle_in)
 world = World(world_data)
 
+#main loop##################################################################################################################
 run = True
 while run:
 
@@ -385,10 +401,12 @@ while run:
     
     # Renderizar o texto da pontuação
 	texto_pontuacao = font.render('peças: ' + str(pontuacao), False, (0, 0, 0))
-	tela.blit(texto_pontuacao, (892, 20)) 
-			
+	tela.blit(texto_pontuacao, (892, 20))
+ 
+	
 	pygame.display.update()
 
+########################################################################################################################
 # Music stop
 pygame.mixer.music.stop()
 pygame.mixer.quit()
