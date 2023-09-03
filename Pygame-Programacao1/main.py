@@ -399,10 +399,17 @@ while run:
     #pontuacao
 	pygame.draw.rect(tela, (255, 255, 255), (890, 20, 100, 22))    
     
-    # Renderizar o texto da pontuação
+    #renderizar o texto da pontuação
 	texto_pontuacao = font.render('peças: ' + str(pontuacao), False, (0, 0, 0))
 	tela.blit(texto_pontuacao, (892, 20))
  
+	# Verifique a colisão entre o jogador e as peças
+	colisoes = pygame.sprite.spritecollide(player, peca_grupo, True)
+
+	# Atualize a pontuação com base nas colisões
+	for peca in colisoes:
+		pontuacao += 1
+		click.play()
 	
 	pygame.display.update()
 
