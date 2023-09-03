@@ -17,6 +17,9 @@ max_levels = 7
 
 tela = pygame.display.set_mode((tela_largura, tela_comprimento))
 
+#barra de pontuacao
+pontuacao = 0
+font = pygame.font.Font(None, 36) 
 
 # Definição do clock do jogo
 clock = pygame.time.Clock()
@@ -376,6 +379,13 @@ while run:
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			run = False
+   
+    #pontuacao
+	pygame.draw.rect(tela, (255, 255, 255), (890, 20, 100, 22))    
+    
+    # Renderizar o texto da pontuação
+	texto_pontuacao = font.render('peças: ' + str(pontuacao), False, (0, 0, 0))
+	tela.blit(texto_pontuacao, (892, 20)) 
 			
 	pygame.display.update()
 
