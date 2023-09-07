@@ -30,6 +30,8 @@ carregar = pygame.image.load('img/load.png')
 peca1 = pygame.image.load('img/peca1.png')
 peca2 = pygame.image.load('img/peca2.png')
 pecas = [peca1, peca2]
+foguete = pygame.image.load('img/foguete2.png.')
+fogueteativo = pygame.image.load('img/foguete1.png')
 #frames do gatinho(personagem) em diversas posições
 frames = []
 player_scale = 60
@@ -99,6 +101,15 @@ def draw_world():
 					#pecas
 					img = pygame.transform.scale(pecas[valor-5], (tile_size // 2, tile_size // 2))					
 					tela.blit(img, (col * tile_size, row * tile_size))
+				elif valor == 7:
+					#foguete
+					img = pygame.transform.scale(foguete, (tile_size // 0.5, tile_size // 0.5))
+					tela.blit(img, (col * tile_size, row * tile_size))
+				elif valor == 8:
+					#fogueteativo
+					img = pygame.transform.scale(fogueteativo, (tile_size // 0.5, tile_size // 0.5))
+					tela.blit(img, (col * tile_size, row * tile_size))
+
 				#elif valor <= 18:
 				#	img = pygame.transform.scale(frames[valor-17], (tile_size, tile_size))
 				#	tela.blit(img, (col * tile_size, row * tile_size + (tile_size)))
