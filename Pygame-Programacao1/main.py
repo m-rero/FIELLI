@@ -1,34 +1,36 @@
-#import´s
+# Import´s
 import pygame
 import pickle
 from os import path
 
-#inicio do jogo
+# Inicio do jogo
 pygame.init()
 pygame.display.set_caption('FIELLI')
-#tela do jogo e configurações
+
+# Tela do jogo e Configurações
 tile_size = 50
 fps = 60
 cols = 20
 margin = 100
 tela_largura = tile_size * cols
 tela_comprimento = (tile_size * cols) - 400 + margin
-level = 2
+level = 1
 max_levels = 7
 tela = pygame.display.set_mode((tela_largura, tela_comprimento))
 
-#pontuacao
+# Pontuação
 pontuacao = 0
 font = pygame.font.Font(None, 36) 
+partes_coletadas = 0
 
-#clock do jogo
+# Clock do jogo
 clock = pygame.time.Clock()
 
-#icone do executável
+# Icone do executável
 icon = pygame.image.load('icon.png')
 pygame.display.set_icon(icon)
 
-#imagens##################################################
+# Imagens
 bg_img = pygame.image.load('img/nivel1.png')
 bg_img_resize = pygame.transform.scale(bg_img,(tela_largura, tela_comprimento))
 peca1 = pygame.image.load('img/peca1.png')
@@ -40,19 +42,21 @@ peca2_y = 0
 rocha = pygame.image.load('img/bloco.png')
 pecas = [peca1, peca2]
 fogo = pygame.image.load('img/fogo.png')
-		
-#musica comeca####################################
+foguete = pygame.image.load('img/foguete2.png')
+fogueteativo = pygame.image.load('img/foguete1.png')
+
+# Música inicia
 pygame.mixer.init()
 pygame.mixer.music.load('sons/intro.mp3')
 pygame.mixer.music.set_volume(0.5)
 pygame.mixer.music.play(-1)
 
-#sons##########################################
+# Sound Effects
 pulo = pygame.mixer.Sound('sons/cat.mp3')
 click = pygame.mixer.Sound('sons/click.mp3')
 pegar = pygame.mixer.Sound('sons/pick.mp3')
 
-#niveis#############################################
+# Niveis
 def reset_level(level):
 	player.reset(100, tela_comprimento - 130)
 
@@ -64,7 +68,7 @@ def reset_level(level):
 
 	return world
 
-#butoes######################################################################################################################
+# Botões
 
 class Button():
 	def __init__(self, x, y, image):
@@ -96,7 +100,7 @@ class Button():
 		return action
 
 
-#mundo#################################################################################################################
+# Mundo
 class World():
 	def __init__(self, data):
 		self.tile_list = []
@@ -134,9 +138,18 @@ class World():
 					peca = Peca(col_count * tile_size, row_count * tile_size )
 					peca_grupo.add(peca)
 
+				elif tile == 7:
+					#foguete
+					foguete = Foguete(col_count * tile_size, row_count * tile_size )
+					foguete_grupo.add(foguete)
+
+				elif tile == 8:
+					#fogueteativo
+					fogueteativo = Fogueteativo(col_count * tile_size, row_count * tile_size )
+					fogueteativo_grupo.add(fogueteativo)
+
 				col_count += 1
 			row_count += 1
-
 
 	def draw(self):
 		for tile in self.tile_list:
@@ -144,7 +157,7 @@ class World():
 			pygame.draw.rect(tela, (255, 255, 255), tile[1], 2)
 
 
-#plataforma##################################################################################################################################
+# Plataforma
 class Plataforma(pygame.sprite.Sprite):
 	#definindo variáveis
 	def __init__(self, x, y, mover_x, mover_y):
@@ -176,17 +189,37 @@ class Plataforma(pygame.sprite.Sprite):
 
 #peca##############################################################################################################################
 class Peca(pygame.sprite.Sprite):
-	#definindo variáveis
 	def __init__(self, x, y):
 		pygame.sprite.Sprite.__init__(self)
 		for _ in range(1,2):
 			img = pygame.image.load(f'img/peca{_}.png')
 			self.image = pygame.transform.scale(img, (tile_size * (3/4), tile_size * (3/4)))
 			self.rect = self.image.get_rect()
-			self.rect.center = (x, y)
+			self.rect.x = x
+			self.rect.y = y
+
+class Foguete(pygame.sprite.Sprite):
+	def __init__(self, x, y):
+		pygame.sprite.Sprite.__init__(self)
+		for _ in range(1,2):
+			img = pygame.image.load(f'img/foguete{2}.png')
+			self.image = pygame.transform.scale(img, (tile_size // 0.5, tile_size // 0.5))
+			self.rect = self.image.get_rect()
+			self.rect.x = x
+			self.rect.y = y
+
+class Fogueteativo(pygame.sprite.Sprite):
+	def __init__(self, x, y):
+		pygame.sprite.Sprite.__init__(self)
+		for _ in range(1, 2):
+			img = pygame.image.load(f'img/foguete{1}.png')
+			self.image = pygame.transform.scale(img, (tile_size // 0.5, tile_size // 0.5))
+			self.rect = self.image.get_rect()
+			self.rect.x = x
+			self.rect.y = y
 
 
-#jogador###########################################################################################################################
+# Jogador
 class Player():
 	def __init__(self, x, y):
 		self.reset(x, y)
@@ -196,7 +229,7 @@ class Player():
 		dy = 0
 		col_thresh = 20
 
-		# teclas
+		# Teclas
 		# Move o gato com base nas teclas pressionadas
 		teclas = pygame.key.get_pressed()
 		if teclas[pygame.K_SPACE] and self.jumped == False and self.in_air == False:
@@ -241,7 +274,7 @@ class Player():
 
 			self.image = pygame.transform.scale(frames_jump_list[int(self.frame_index)], (80, 80))
 
-		#gravidade
+		# Gravidade
 		self.vel_y += 1
 		if self.vel_y > 10:
 			self.vel_y = 10
@@ -264,7 +297,7 @@ class Player():
 					self.vel_y = 0
 					self.in_air = False
 
-		#checar colisão com as plataformas
+		# Checar colisão com as plataformas
 		for plataforma in plataforma_grupo:
 			#colisão em direcao x
 			if plataforma.rect.colliderect(self.rect.x + dx, self.rect.y, self.largura, self.altura):
@@ -365,19 +398,21 @@ player = Player(0, 460)
 
 plataforma_grupo = pygame.sprite.Group()
 peca_grupo = pygame.sprite.Group()
+foguete_grupo = pygame.sprite.Group()
+fogueteativo_grupo = pygame.sprite.Group()
 
 def reset_level(level):
 	player.reset(100, tela_comprimento - 460)
 	
 
-#carregar data nível#########################################################################################################
+# Carregar "data-nível"
 
 if path.exists(f'niveis/level{level}_data'):
 	pickle_in = open(f'niveis/level{level}_data', 'rb')
 	world_data = pickle.load(pickle_in)
 world = World(world_data)
 
-#main loop##################################################################################################################
+# Main loop
 run = True
 while run:
 
@@ -387,35 +422,52 @@ while run:
 	
 	world.draw()
 	player.update ()
+
 	plataforma_grupo.update()
 	plataforma_grupo.draw(tela)
+
 	peca_grupo.update()
 	peca_grupo.draw(tela)
+
+	foguete_grupo.update()
+	foguete_grupo.draw(tela)
+
+	fogueteativo_grupo.update()
+	fogueteativo_grupo.draw(tela)
 
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			run = False
    
-    #pontuacao
+    # Pontuacao
 	pygame.draw.rect(tela, (255, 255, 255), (890, 20, 100, 21))
     
-    #renderizar o texto da pontuação
+    # Renderizar o texto da pontuação
 	fontegame = pygame.font.Font('script/fontes/OMORI-GAME2.ttf ', 25)
 	texto_pontuacao = fontegame.render('Partes: ' + str(pontuacao), False, (0, 0, 0))
 	tela.blit(texto_pontuacao, (892, 17))
- 
-	# Verifique a colisão entre o jogador e as peças
+
 	colisoes = pygame.sprite.spritecollide(player, peca_grupo, True)
+	colisao_fogueteativo = pygame.sprite.spritecollide(player, fogueteativo_grupo, False)
 
 	# Atualize a pontuação com base nas colisões
 	for partes in colisoes:
 		pontuacao += 1
+		partes_coletadas += 1
 		click.play()
-	
+
+	for colisao_fogueteativo in colisoes:
+		if partes_coletadas >= 5:
+			foguete_grupo.empty()
+			fogueteativo_grupo.add(Fogueteativo(900, 400))
+			partes_coletadas = 0
+
+		if colisao_fogueteativo == True:
+			level += 1
+
 	pygame.display.update()
 
-########################################################################################################################
-# Music stop
+# Música Para
 pygame.mixer.music.stop()
 pygame.mixer.quit()
 
