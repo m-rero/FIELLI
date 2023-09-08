@@ -4,6 +4,10 @@ pygame.init() #inicia todos os modulos instalados de pygame
 screen = pygame.display.set_mode((1000, 700)) #cria a tela *
 pygame.display.set_caption('MENU') #legenda da tela
 
+#icone do executável
+icon = pygame.image.load('icon.png')
+pygame.display.set_icon(icon)
+
 #tela do jogo e configurações
 tile_size = 50
 cols = 20
@@ -12,6 +16,8 @@ tela_largura = tile_size * cols
 tela_comprimento = (tile_size * cols) - 400 + margin
 tela = pygame.display.set_mode((tela_largura, tela_comprimento))
 
+#som
+click = pygame.mixer.Sound('sons/click.mp3')
 
 altura_botao = 80
 largura_botao = 330
@@ -43,6 +49,7 @@ while True:
             pygame.quit()
         if events.type == pygame.MOUSEBUTTONDOWN: #cursor em cima do botao
             if button1.collidepoint(events.pos): #cursor aperta o botao
+                click.play()
                 pygame.quit()
     a,b = pygame.mouse.get_pos()
     if button1.x <= a <= button1.x + largura_botao and button1.y <= b <= button1.y + altura_botao: #cursor em cima do botao
@@ -56,6 +63,7 @@ while True:
     for events in pygame.event.get(): #botao options
         if events.type == pygame.MOUSEBUTTONDOWN: #cursor em cima do botao
             if button2.collidepoint(events.pos): #cursor aperta o botao
+                click.play()
                 pygame.quit()
     a,b = pygame.mouse.get_pos()
     if button2.x <= a <= button2.x + largura_botao and button2.y <= b <= button2.y + altura_botao: #cursor em cima do botao
@@ -70,6 +78,7 @@ while True:
     for events in pygame.event.get(): #botao quit
         if events.type == pygame.MOUSEBUTTONDOWN: #cursor em cima do botao
             if button3.collidepoint(events.pos): #cursor aperta o botao
+                click.play()
                 pygame.quit()
     a,b = pygame.mouse.get_pos()
     if button3.x <= a <= button3.x + largura_botao and button3.y <= b <= button3.y + altura_botao: #cursor em cima do botao
