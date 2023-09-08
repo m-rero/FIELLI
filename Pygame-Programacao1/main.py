@@ -1,4 +1,4 @@
-# Import´s
+# Imports
 import pygame
 import pickle
 from os import path
@@ -15,7 +15,7 @@ margin = 100
 tela_largura = tile_size * cols
 tela_comprimento = (tile_size * cols) - 400 + margin
 level = 1
-max_levels = 7
+max_levels = 2
 tela = pygame.display.set_mode((tela_largura, tela_comprimento))
 
 # Pontuação
@@ -72,6 +72,24 @@ def reset_world(level):
 	# Reinicie o estado do jogador (se necessário)
 	player.reset(tile_size, tile_size)
 	return world
+
+def reset_level(level):
+	player.reset(100, tela_largura - 130)
+	plataforma_grupo.empty()
+	peca_grupo.empty()
+	foguete_grupo.empty()
+	fogueteativo_grupo.empty()
+
+	#load in level data and create world
+	if path.exists(f'niveis/level{level}_data'):
+		pickle_in = open(f'niveis/level{level}_data', 'rb')
+		world_data = pickle.load(pickle_in)
+	
+	world = World(world_data)
+	
+	return world
+
+
 
 # Botões
 
@@ -394,15 +412,14 @@ class Player():
 			frame_image_left = pygame.transform.flip(frame_image, True, False)
 			self.frames_jump_left.append(frame_image_left)
 
+
+
 player = Player(0, 460)
 
 plataforma_grupo = pygame.sprite.Group()
 peca_grupo = pygame.sprite.Group()
 foguete_grupo = pygame.sprite.Group()
-fogueteativo_grupo = pygame.sprite.Group()
-
-def reset_level(level):
-	player.reset(100, tela_comprimento - 460)
+fogueteativo_grupo = pygame.sprite.Group() 
 
 
 # Carregar "data-nível"
@@ -415,6 +432,7 @@ world = World(world_data)
 # Main loop
 run = True
 while run:
+
 
 	clock.tick(fps)
 
@@ -448,20 +466,25 @@ while run:
 	tela.blit(texto_pontuacao, (892, 17))
 
 	colisoes = pygame.sprite.spritecollide(player, peca_grupo, True)
+	
 
 	# Atualize a pontuação com base nas colisões
 	for partes in colisoes:
 		pontuacao += 1
+		partes_coletadas += 1
 		click.play()
 
-	for colisao_fogueteativo in colisoes:
-		if pontuacao == 5:
-			foguete_grupo.empty()
-			fogueteativo_grupo.add(Fogueteativo(900, 400))
+	
+	if partes_coletadas == 5:
+		fogueteativo_grupo.add(Fogueteativo(900, 400))
+		
+		level += 1
+		if level <= max_levels:
+			#reset level
+			world_data = []
+			world = reset_level(level)
 
 
-		if colisao_fogueteativo == True:
-				level += 1
 
 	pygame.display.update()
 
