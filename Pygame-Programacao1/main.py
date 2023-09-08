@@ -20,7 +20,7 @@ tela = pygame.display.set_mode((tela_largura, tela_comprimento))
 
 # Pontuação
 pontuacao = 0
-font = pygame.font.Font(None, 36) 
+font = pygame.font.Font(None, 36)
 partes_coletadas = 0
 
 # Clock do jogo
@@ -57,15 +57,20 @@ click = pygame.mixer.Sound('sons/click.mp3')
 pegar = pygame.mixer.Sound('sons/pick.mp3')
 
 # Niveis
-def reset_level(level):
-	player.reset(100, tela_comprimento - 130)
-
-	#load in level data and create world
-	if path.exists(f'level{level}_data'):
-		pickle_in = open(f'level{level}_data', 'rb')
+def reset_world(level):
+	# Recarregue os dados do nível (se necessário)
+	if path.exists(f'niveis/level{level}_data'):
+		pickle_in = open(f'niveis/level{level}_data', 'rb')
 		world_data = pickle.load(pickle_in)
-	world = World(world_data)
 
+	# Limpe os grupos de sprites (se necessário)
+	plataforma_grupo.empty()
+	peca_grupo.empty()
+	foguete_grupo.empty()
+	fogueteativo_grupo.empty()
+
+	# Reinicie o estado do jogador (se necessário)
+	player.reset(tile_size, tile_size)
 	return world
 
 # Botões
@@ -119,7 +124,7 @@ class World():
 				elif tile == 2:
 					#plataforma
 					#self, x, y, mover_x, mover_y --> definicao x, y coordenadas e movimento vertical ou horizontal das plataformas (0,1 - vertical e 1,0 - horizontal)
-					plataforma = Plataforma(col_count * tile_size, row_count * tile_size, 1, 0) 
+					plataforma = Plataforma(col_count * tile_size, row_count * tile_size, 1, 0)
 					plataforma_grupo.add(plataforma)
 				elif tile == 3:
 					#plataforma
@@ -142,11 +147,6 @@ class World():
 					#foguete
 					foguete = Foguete(col_count * tile_size, row_count * tile_size )
 					foguete_grupo.add(foguete)
-
-				elif tile == 8:
-					#fogueteativo
-					fogueteativo = Fogueteativo(col_count * tile_size, row_count * tile_size )
-					fogueteativo_grupo.add(fogueteativo)
 
 				col_count += 1
 			row_count += 1
@@ -182,18 +182,18 @@ class Plataforma(pygame.sprite.Sprite):
 		self.rect.y += self.mover_direcao * self.mover_y
 		self.mover_contra += 1
 		#movimento de ida e volta da plataforma - definicao de limite de movimento antes de inventer direcao
-		if abs(self.mover_contra) > 50: 
+		if abs(self.mover_contra) > 50:
 			self.mover_direcao *= -1
 			self.mover_contra *= -1
 
 
-#peca##############################################################################################################################
+# Peças
 class Peca(pygame.sprite.Sprite):
 	def __init__(self, x, y):
 		pygame.sprite.Sprite.__init__(self)
 		for _ in range(1,2):
 			img = pygame.image.load(f'img/peca{_}.png')
-			self.image = pygame.transform.scale(img, (tile_size * (3/4), tile_size * (3/4)))
+			self.image = pygame.transform.scale(img, (tile_size * (5/6), tile_size * (5/6)))
 			self.rect = self.image.get_rect()
 			self.rect.x = x
 			self.rect.y = y
@@ -326,7 +326,7 @@ class Player():
 			self.rect.x = 0
 		elif self.rect.x > tela_largura - self.largura:
 			self.rect.x = tela_largura - self.largura
-		
+
 		# Verifique os limites verticais
 		if self.rect.y < 0:
 			self.rect.y = 0
@@ -362,7 +362,7 @@ class Player():
 		self.frames_right = []  # Quadros de animação para a direção direita
 		self.frames_left = []  # Quadros de animação para a direção esquerda
 
-		
+
 		for frame_number in range(3, 5):
 			frame_image = pygame.transform.scale(
 				pygame.image.load(f'img/gato/spritesfielli/{frame_number}.png'),
@@ -403,7 +403,7 @@ fogueteativo_grupo = pygame.sprite.Group()
 
 def reset_level(level):
 	player.reset(100, tela_comprimento - 460)
-	
+
 
 # Carregar "data-nível"
 
@@ -417,9 +417,9 @@ run = True
 while run:
 
 	clock.tick(fps)
-	
+
 	tela.blit(bg_img_resize, (0, 0))
-	
+
 	world.draw()
 	player.update ()
 
@@ -438,10 +438,10 @@ while run:
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			run = False
-   
+
     # Pontuacao
 	pygame.draw.rect(tela, (255, 255, 255), (890, 20, 100, 21))
-    
+
     # Renderizar o texto da pontuação
 	fontegame = pygame.font.Font('script/fontes/OMORI-GAME2.ttf ', 25)
 	texto_pontuacao = fontegame.render('Partes: ' + str(pontuacao), False, (0, 0, 0))
@@ -457,13 +457,14 @@ while run:
 		click.play()
 
 	for colisao_fogueteativo in colisoes:
-		if partes_coletadas >= 5:
+		if partes_coletadas == 5:
 			foguete_grupo.empty()
 			fogueteativo_grupo.add(Fogueteativo(900, 400))
-			partes_coletadas = 0
 
 		if colisao_fogueteativo == True:
-			level += 1
+				level += 1
+				pontuacao -= 5
+
 
 	pygame.display.update()
 
@@ -472,3 +473,4 @@ pygame.mixer.music.stop()
 pygame.mixer.quit()
 
 pygame.quit()
+
