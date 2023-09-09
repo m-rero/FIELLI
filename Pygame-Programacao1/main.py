@@ -15,13 +15,12 @@ margin = 100
 tela_largura = tile_size * cols
 tela_comprimento = (tile_size * cols) - 400 + margin
 level = 1
-max_levels = 2
+max_levels = 4
 tela = pygame.display.set_mode((tela_largura, tela_comprimento))
 
 # Pontuação
 pontuacao = 0
 font = pygame.font.Font(None, 36)
-partes_coletadas = 0
 
 # Clock do jogo
 clock = pygame.time.Clock()
@@ -29,6 +28,9 @@ clock = pygame.time.Clock()
 # Icone do executável
 icon = pygame.image.load('icon.png')
 pygame.display.set_icon(icon)
+
+# Variável para controlar a exibição da mensagem de nível
+exibir_mensagem_nivel = True
 
 # Imagens
 bg_img = pygame.image.load('img/nivel1.png')
@@ -89,10 +91,7 @@ def reset_level(level):
 	
 	return world
 
-
-
 # Botões
-
 class Button():
 	def __init__(self, x, y, image):
 		self.image = image
@@ -115,7 +114,6 @@ class Button():
 
 		if pygame.mouse.get_pressed()[0] == 0:
 			self.clicked = False
-
 
 		#draw button
 		tela.blit(self.image, self.rect)
@@ -168,12 +166,10 @@ class World():
 
 				col_count += 1
 			row_count += 1
-
 	def draw(self):
 		for tile in self.tile_list:
 			tela.blit(tile[0], tile[1])
 			pygame.draw.rect(tela, (255, 255, 255), tile[1], 2)
-
 
 # Plataforma
 class Plataforma(pygame.sprite.Sprite):
@@ -193,7 +189,6 @@ class Plataforma(pygame.sprite.Sprite):
 		self.mover_x = mover_x
 		self.mover_y = mover_y
 
-
 	def update(self):
 		#criar movimento com os valores definidos
 		self.rect.x += self.mover_direcao * self.mover_x
@@ -203,7 +198,6 @@ class Plataforma(pygame.sprite.Sprite):
 		if abs(self.mover_contra) > 50:
 			self.mover_direcao *= -1
 			self.mover_contra *= -1
-
 
 # Peças
 class Peca(pygame.sprite.Sprite):
@@ -215,7 +209,6 @@ class Peca(pygame.sprite.Sprite):
 			self.rect = self.image.get_rect()
 			self.rect.x = x
 			self.rect.y = y
-
 class Foguete(pygame.sprite.Sprite):
 	def __init__(self, x, y):
 		pygame.sprite.Sprite.__init__(self)
@@ -225,17 +218,6 @@ class Foguete(pygame.sprite.Sprite):
 			self.rect = self.image.get_rect()
 			self.rect.x = x
 			self.rect.y = y
-
-class Fogueteativo(pygame.sprite.Sprite):
-	def __init__(self, x, y):
-		pygame.sprite.Sprite.__init__(self)
-		for _ in range(1, 2):
-			img = pygame.image.load(f'img/foguete{1}.png')
-			self.image = pygame.transform.scale(img, (tile_size // 0.5, tile_size // 0.5))
-			self.rect = self.image.get_rect()
-			self.rect.x = x
-			self.rect.y = y
-
 
 # Jogador
 class Player():
@@ -412,18 +394,14 @@ class Player():
 			frame_image_left = pygame.transform.flip(frame_image, True, False)
 			self.frames_jump_left.append(frame_image_left)
 
-
-
 player = Player(0, 460)
 
 plataforma_grupo = pygame.sprite.Group()
 peca_grupo = pygame.sprite.Group()
 foguete_grupo = pygame.sprite.Group()
-fogueteativo_grupo = pygame.sprite.Group() 
-
+fogueteativo_grupo = pygame.sprite.Group()
 
 # Carregar "data-nível"
-
 if path.exists(f'niveis/level{level}_data'):
 	pickle_in = open(f'niveis/level{level}_data', 'rb')
 	world_data = pickle.load(pickle_in)
@@ -433,13 +411,42 @@ world = World(world_data)
 run = True
 while run:
 
-
 	clock.tick(fps)
 
 	tela.blit(bg_img_resize, (0, 0))
 
+	# Mensagens dos Níveis
+	mensagens_nivel = {
+		1: "Um novo mundo",
+		2: "De pulo em pulo...",
+		3: "''Picos aranhadores''",
+		4: "Plataformas remexidas",
+		5: "Mensagem para nível 5",
+		6: "Mensagem para nível 6",
+		7: "Mensagem para nível 7",
+		8: "Mensagem para nível 8",
+		9: "Mensagem para nível 9",
+		10: "Mensagem para nível 10",
+	}
+
+	if exibir_mensagem_nivel:
+		fontegame = pygame.font.Font('script/fontes/OMORI-GAME2.ttf ', 25)
+		mensagem = fontegame.render(f"Nivel {level} - {mensagens_nivel.get(level)}", True, (255, 255, 255))
+		tela.blit(mensagem,(tela_largura // 2 - mensagem.get_width() // 2, tela_comprimento // 2 - mensagem.get_height() // 2))
+		pygame.display.update()
+
+		esperando = True
+		while esperando:
+			for event in pygame.event.get():
+				if event.type == pygame.KEYDOWN:
+					esperando = False
+
+		exibir_mensagem_nivel = False
+
+	tela.blit(bg_img_resize, (0, 0))
+
 	world.draw()
-	player.update ()
+	player.update()
 
 	plataforma_grupo.update()
 	plataforma_grupo.draw(tela)
@@ -450,41 +457,34 @@ while run:
 	foguete_grupo.update()
 	foguete_grupo.draw(tela)
 
-	fogueteativo_grupo.update()
-	fogueteativo_grupo.draw(tela)
-
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			run = False
 
-    # Pontuacao
+	# Pontuação
 	pygame.draw.rect(tela, (255, 255, 255), (890, 20, 100, 21))
 
-    # Renderizar o texto da pontuação
+	# Renderizar o texto da pontuação
 	fontegame = pygame.font.Font('script/fontes/OMORI-GAME2.ttf ', 25)
 	texto_pontuacao = fontegame.render('Partes: ' + str(pontuacao), False, (0, 0, 0))
 	tela.blit(texto_pontuacao, (892, 17))
 
 	colisoes = pygame.sprite.spritecollide(player, peca_grupo, True)
-	
 
 	# Atualize a pontuação com base nas colisões
 	for partes in colisoes:
 		pontuacao += 1
-		partes_coletadas += 1
 		click.play()
 
-	
-	if partes_coletadas == 5:
-		fogueteativo_grupo.add(Fogueteativo(900, 400))
-		
+	if pontuacao == 5:
 		level += 1
 		if level <= max_levels:
-			#reset level
+			# Reset level
+			pontuacao -= 5
+			pygame.time.delay(100)
 			world_data = []
 			world = reset_level(level)
-
-
+			exibir_mensagem_nivel = True
 
 	pygame.display.update()
 
