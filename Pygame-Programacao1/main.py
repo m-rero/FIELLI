@@ -43,7 +43,7 @@ peca2_x = 0
 peca2_y = 0
 rocha = pygame.image.load('img/bloco.png')
 pecas = [peca1, peca2]
-fogo = pygame.image.load('img/fogo.png')
+espinhos = pygame.image.load('img/espinhos.png')
 foguete = pygame.image.load('img/foguete2.png')
 fogueteativo = pygame.image.load('img/foguete1.png')
 
@@ -147,8 +147,8 @@ class World():
 					plataforma = Plataforma(col_count * tile_size, row_count * tile_size, 0, 1)
 					plataforma_grupo.add(plataforma)
 				elif tile == 4:
-					#fogo
-					img = pygame.transform.scale(fogo, (tile_size, tile_size))
+					#espinhos
+					img = pygame.transform.scale(espinhos, (tile_size, tile_size))
 					img_rect = img.get_rect()
 					img_rect.x = col_count * tile_size
 					img_rect.y = row_count * tile_size
@@ -169,7 +169,6 @@ class World():
 	def draw(self):
 		for tile in self.tile_list:
 			tela.blit(tile[0], tile[1])
-			pygame.draw.rect(tela, (255, 255, 255), tile[1], 2)
 
 # Plataforma
 class Plataforma(pygame.sprite.Sprite):
@@ -424,13 +423,10 @@ while run:
 		5: "Mensagem para nível 5",
 		6: "Mensagem para nível 6",
 		7: "Mensagem para nível 7",
-		8: "Mensagem para nível 8",
-		9: "Mensagem para nível 9",
-		10: "Mensagem para nível 10",
 	}
 
 	if exibir_mensagem_nivel:
-		fontegame = pygame.font.Font('script/fontes/OMORI-GAME2.ttf ', 25)
+		fontegame = pygame.font.Font('script/fontes/OMORI-GAME2.ttf ', 50)
 		mensagem = fontegame.render(f"Nivel {level} - {mensagens_nivel.get(level)}", True, (255, 255, 255))
 		tela.blit(mensagem,(tela_largura // 2 - mensagem.get_width() // 2, tela_comprimento // 2 - mensagem.get_height() // 2))
 		pygame.display.update()

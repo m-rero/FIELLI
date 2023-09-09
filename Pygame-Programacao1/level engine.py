@@ -24,7 +24,7 @@ bg_img = pygame.image.load('img/nivel1.png')
 bg_img_resize = pygame.transform.scale(bg_img,(tela_largura, tela_comprimento))
 bloco = pygame.image.load('img/bloco2.png')
 rocha = pygame.image.load('img/bloco.png')
-fogo = pygame.image.load('img/fogo.png')
+espinhos = pygame.image.load('img/espinhos.png')
 salvar = pygame.image.load('img/save.png')
 carregar = pygame.image.load('img/load.png')
 peca1 = pygame.image.load('img/peca1.png')
@@ -94,8 +94,8 @@ def draw_world():
 					img = pygame.transform.scale(rocha, (tile_size, tile_size // 2))
 					tela.blit(img, (col * tile_size, row * tile_size))
 				elif valor == 4:
-					#fogo
-					img = pygame.transform.scale(fogo, (tile_size, int(tile_size * 0.75)))
+					#espinhos
+					img = pygame.transform.scale(espinhos	, (tile_size, int(tile_size * 0.75)))
 					tela.blit(img, (col * tile_size, row * tile_size + (tile_size * 0.25)))
 				elif valor == 5 or valor == 6:
 					#pecas
