@@ -49,7 +49,7 @@ fogueteativo = pygame.image.load('img/foguete1.png')
 
 # Música inicia
 pygame.mixer.init()
-pygame.mixer.music.load('sons/intro.mp3')
+pygame.mixer.music.load('sons/New_Super_Mario_Bros.mp3')
 pygame.mixer.music.set_volume(0.5)
 pygame.mixer.music.play(-1)
 
