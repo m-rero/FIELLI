@@ -16,6 +16,10 @@ pygame.display.set_caption('MENU') #legenda da tela
 
 #som
 click = pygame.mixer.Sound('sons/click.mp3')
+pygame.mixer.init()
+pygame.mixer.music.load('sons/intro.mp3')
+pygame.mixer.music.set_volume(0.5)
+pygame.mixer.music.play(-1)
 
 altura_botao = 80
 largura_botao = 330
@@ -84,3 +88,7 @@ while True:
     tela.blit(textobotao3, (button3.x + 75, button3.y + 2)) #borda do botao
 
     pygame.display.update()
+    
+# Música Para
+pygame.mixer.music.stop()
+pygame.mixer.quit()
