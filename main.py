@@ -32,9 +32,12 @@ pygame.display.set_icon(icon)
 # Variável para controlar a exibição da mensagem de nível
 exibir_mensagem_nivel = True
 
+# Variável que define o Game Over
+game_over = False
+
 # Imagens
 bg_img = pygame.image.load('img/nivel1.png')
-bg_img_resize = pygame.transform.scale(bg_img,(tela_largura, tela_comprimento))
+bg_img_resize = pygame.transform.scale(bg_img, (tela_largura, tela_comprimento))
 peca1 = pygame.image.load('img/peca1.png')
 peca1_x = 0
 peca1_y = 0
@@ -49,7 +52,7 @@ fogueteativo = pygame.image.load('img/foguete1.png')
 
 # Música inicia
 pygame.mixer.init()
-pygame.mixer.music.load('sons/New_Super_Mario_Bros.mp3')
+pygame.mixer.music.load('sons/intro.mp3')
 pygame.mixer.music.set_volume(0.5)
 pygame.mixer.music.play(-1)
 
@@ -57,6 +60,7 @@ pygame.mixer.music.play(-1)
 pulo = pygame.mixer.Sound('sons/cat.mp3')
 click = pygame.mixer.Sound('sons/click.mp3')
 pegar = pygame.mixer.Sound('sons/pick.mp3')
+
 
 # Niveis
 def reset_world(level):
@@ -75,6 +79,7 @@ def reset_world(level):
 	player.reset(tile_size, tile_size)
 	return world
 
+
 def reset_level(level):
 	player.reset(100, tela_largura - 130)
 	plataforma_grupo.empty()
@@ -82,14 +87,15 @@ def reset_level(level):
 	foguete_grupo.empty()
 	fogueteativo_grupo.empty()
 
-	#load in level data and create world
+	# load in level data and create world
 	if path.exists(f'niveis/level{level}_data'):
 		pickle_in = open(f'niveis/level{level}_data', 'rb')
 		world_data = pickle.load(pickle_in)
-	
+
 	world = World(world_data)
-	
+
 	return world
+
 
 # Botões
 class Button():
@@ -103,10 +109,10 @@ class Button():
 	def draw(self):
 		action = False
 
-		#get mouse position
+		# get mouse position
 		pos = pygame.mouse.get_pos()
 
-		#check mouseover and clicked conditions
+		# check mouseover and clicked conditions
 		if self.rect.collidepoint(pos):
 			if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
 				action = True
@@ -115,7 +121,7 @@ class Button():
 		if pygame.mouse.get_pressed()[0] == 0:
 			self.clicked = False
 
-		#draw button
+		# draw button
 		tela.blit(self.image, self.rect)
 
 		return action
@@ -138,49 +144,45 @@ class World():
 					tile = (img, img_rect)
 					self.tile_list.append(tile)
 				elif tile == 2:
-					#plataforma
-					#self, x, y, mover_x, mover_y --> definicao x, y coordenadas e movimento vertical ou horizontal das plataformas (0,1 - vertical e 1,0 - horizontal)
+					# plataforma
 					plataforma = Plataforma(col_count * tile_size, row_count * tile_size, 1, 0)
 					plataforma_grupo.add(plataforma)
 				elif tile == 3:
-					#plataforma
+					# plataforma
 					plataforma = Plataforma(col_count * tile_size, row_count * tile_size, 0, 1)
 					plataforma_grupo.add(plataforma)
 				elif tile == 4:
-					#espinhos
-					img = pygame.transform.scale(espinhos, (tile_size, tile_size))
-					img_rect = img.get_rect()
-					img_rect.x = col_count * tile_size
-					img_rect.y = row_count * tile_size
-					tile = (img, img_rect)
-					self.tile_list.append(tile)
+					# espinhos
+					espinho = Espinhos(col_count * tile_size, row_count * tile_size)
+					espinhos_grupo.add(espinho)
 				elif tile > 4 and tile <= 6:
-					#pecas
-					peca = Peca(col_count * tile_size, row_count * tile_size )
+					# peças
+					peca = Peca(col_count * tile_size, row_count * tile_size)
 					peca_grupo.add(peca)
-
 				elif tile == 7:
-					#foguete
-					foguete = Foguete(col_count * tile_size, row_count * tile_size )
+					# foguete
+					foguete = Foguete(col_count * tile_size, row_count * tile_size)
 					foguete_grupo.add(foguete)
 
 				col_count += 1
 			row_count += 1
+
 	def draw(self):
 		for tile in self.tile_list:
 			tela.blit(tile[0], tile[1])
 
+
 # Plataforma
 class Plataforma(pygame.sprite.Sprite):
-	#definindo variáveis
+	# definindo variáveis
 	def __init__(self, x, y, mover_x, mover_y):
 		pygame.sprite.Sprite.__init__(self)
-		#carregar imagem de rocha e transformar em tamanho de plataforma
+		# carregar imagem de rocha e transformar em tamanho de plataforma
 		img = pygame.image.load('img/bloco.png')
 		self.image = pygame.transform.scale(img, (tile_size, tile_size // 2))
-		#transformar em objeto retângulo para colisão
+		# transformar em objeto retângulo para colisão
 		self.rect = self.image.get_rect()
-		#chamar coordenadas
+		# chamar coordenadas
 		self.rect.x = x
 		self.rect.y = y
 		self.mover_contra = 0
@@ -189,34 +191,48 @@ class Plataforma(pygame.sprite.Sprite):
 		self.mover_y = mover_y
 
 	def update(self):
-		#criar movimento com os valores definidos
+		# criar movimento com os valores definidos
 		self.rect.x += self.mover_direcao * self.mover_x
 		self.rect.y += self.mover_direcao * self.mover_y
 		self.mover_contra += 1
-		#movimento de ida e volta da plataforma - definicao de limite de movimento antes de inventer direcao
+		# movimento de ida e volta da plataforma - definicao de limite de movimento antes de inventer direcao
 		if abs(self.mover_contra) > 50:
 			self.mover_direcao *= -1
 			self.mover_contra *= -1
+
 
 # Peças
 class Peca(pygame.sprite.Sprite):
 	def __init__(self, x, y):
 		pygame.sprite.Sprite.__init__(self)
-		for _ in range(1,2):
+		for _ in range(1, 2):
 			img = pygame.image.load(f'img/peca{_}.png')
-			self.image = pygame.transform.scale(img, (tile_size * (5/6), tile_size * (5/6)))
+			self.image = pygame.transform.scale(img, (tile_size * (5 / 6), tile_size * (5 / 6)))
 			self.rect = self.image.get_rect()
 			self.rect.x = x
 			self.rect.y = y
+
+
 class Foguete(pygame.sprite.Sprite):
 	def __init__(self, x, y):
 		pygame.sprite.Sprite.__init__(self)
-		for _ in range(1,2):
+		for _ in range(1, 2):
 			img = pygame.image.load(f'img/foguete{2}.png')
 			self.image = pygame.transform.scale(img, (tile_size // 0.5, tile_size // 0.5))
 			self.rect = self.image.get_rect()
 			self.rect.x = x
 			self.rect.y = y
+
+
+class Espinhos(pygame.sprite.Sprite):
+	def __init__(self, x, y):
+		pygame.sprite.Sprite.__init__(self)
+		img = pygame.image.load(f'img/espinhos.png')
+		self.image = pygame.transform.scale(img, (tile_size * (5 / 6), tile_size * (5 / 6)))
+		self.rect = self.image.get_rect()
+		self.rect.x = x
+		self.rect.y = y
+
 
 # Jogador
 class Player():
@@ -280,7 +296,7 @@ class Player():
 		dy += self.vel_y
 
 		# Checar colisão
-		self.in_air =  True
+		self.in_air = True
 		for tile in world.tile_list:
 			# Checar colisão em x | tile[1] = solo rocha
 			if tile[1].colliderect(self.rect.x + dx, self.rect.y, self.largura, self.altura):
@@ -298,21 +314,21 @@ class Player():
 
 		# Checar colisão com as plataformas
 		for plataforma in plataforma_grupo:
-			#colisão em direcao x
+			# colisão em direcao x
 			if plataforma.rect.colliderect(self.rect.x + dx, self.rect.y, self.largura, self.altura):
 				dx = 0
-			#colisao em direcao y
+			# colisao em direcao y
 			if plataforma.rect.colliderect(self.rect.x, self.rect.y + dy, self.largura, self.altura):
-				#checar se player esta abaixo da plataforma
+				# checar se player esta abaixo da plataforma
 				if abs((self.rect.top + dy) - plataforma.rect.bottom) < col_thresh:
 					self.vel_y = 0
 					dy = plataforma.rect.bottom - self.rect.top
-				#checar se player esta em cima da plataforma
+				# checar se player esta em cima da plataforma
 				elif abs((self.rect.bottom + dy) - plataforma.rect.top) < col_thresh:
 					self.rect.bottom = plataforma.rect.top
 					self.in_air = False
 					dy = 0
-				#mover (em x - horizontal) com a plataforma
+				# mover (em x - horizontal) com a plataforma
 				if plataforma.mover_x != 0:
 					self.rect.x += plataforma.mover_direcao
 
@@ -339,7 +355,7 @@ class Player():
 		frames = []
 		player_scale = 60
 		for _ in range(1, 6):
-			frames.append(pygame.transform.scale(pygame.image.load(f'img/gato/spritesfielli/{_}.png'), (5 * player_scale, 8 * player_scale)))
+			frames.append(pygame.transform.scale(pygame.image.load(f'img/gato/spritesfielli/{_}.png'),(5 * player_scale, 8 * player_scale)))
 		img = frames[0]
 		self.image = pygame.transform.scale(img, (80, 80))
 		self.rect = self.image.get_rect()
@@ -348,7 +364,7 @@ class Player():
 		self.largura = self.image.get_width()
 		self.altura = self.image.get_height()
 		self.vel_y = 0
-		self.pulando  = False
+		self.pulando = False
 		self.direction = 0
 		self.in_air = True
 		self.index = 0
@@ -356,16 +372,15 @@ class Player():
 		self.velocidade_x = 4
 		self.frames = []
 
-		#Dedica-se aqui apenas para a animação dos sprites:
+		# Dedica-se aqui apenas para a animação dos sprites:
 
 		self.frames_right = []  # Quadros de animação para a direção direita
 		self.frames_left = []  # Quadros de animação para a direção esquerda
 
-
 		for frame_number in range(3, 5):
 			frame_image = pygame.transform.scale(
 				pygame.image.load(f'img/gato/spritesfielli/{frame_number}.png'),
-				(80,80)
+				(80, 80)
 			)
 			self.frames_right.append(frame_image)
 			self.frames.append(frame_image)
@@ -386,19 +401,21 @@ class Player():
 		for frame_number in range(9, 10):  # Use os números apropriados para os frames de pulo
 			frame_image = pygame.transform.scale(
 				pygame.image.load(f'img/gato/spritesfielli/{frame_number}.png'),
-				(80,80)
+				(80, 80)
 			)
 			self.frames_jump_right.append(frame_image)
 
 			frame_image_left = pygame.transform.flip(frame_image, True, False)
 			self.frames_jump_left.append(frame_image_left)
 
-player = Player(0, 460)
+
+player = Player(0, 800)
 
 plataforma_grupo = pygame.sprite.Group()
 peca_grupo = pygame.sprite.Group()
 foguete_grupo = pygame.sprite.Group()
 fogueteativo_grupo = pygame.sprite.Group()
+espinhos_grupo = pygame.sprite.Group()
 
 # Carregar "data-nível"
 if path.exists(f'niveis/level{level}_data'):
@@ -428,7 +445,8 @@ while run:
 	if exibir_mensagem_nivel:
 		fontegame = pygame.font.Font('script/fontes/OMORI-GAME2.ttf ', 50)
 		mensagem = fontegame.render(f"Nivel {level} - {mensagens_nivel.get(level)}", True, (255, 255, 255))
-		tela.blit(mensagem,(tela_largura // 2 - mensagem.get_width() // 2, tela_comprimento // 2 - mensagem.get_height() // 2))
+		tela.blit(mensagem,
+				  (tela_largura // 2 - mensagem.get_width() // 2, tela_comprimento // 2 - mensagem.get_height() // 2))
 		pygame.display.update()
 
 		esperando = True
@@ -452,6 +470,9 @@ while run:
 
 	foguete_grupo.update()
 	foguete_grupo.draw(tela)
+
+	espinhos_grupo.update()
+	espinhos_grupo.draw(tela)
 
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
@@ -478,9 +499,26 @@ while run:
 			# Reset level
 			pontuacao -= 5
 			pygame.time.delay(100)
+			espinhos_grupo.empty()
 			world_data = []
 			world = reset_level(level)
 			exibir_mensagem_nivel = True
+
+	# Colisões com espinhos
+	colisoesespinhos = pygame.sprite.spritecollide(player, espinhos_grupo, False)
+
+	if colisoesespinhos and level != max_levels:
+		game_over = True
+
+		if game_over:
+			# Mostra a mensagem de Game Over
+			game_over = True
+			pontuacao = 0
+			level = 1
+			exec(open("game_over.py").read())
+
+
+	# Reinicie o jogo
 
 	pygame.display.update()
 
