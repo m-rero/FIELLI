@@ -50,10 +50,10 @@ while True:
         if events.type == pygame.MOUSEBUTTONDOWN: #cursor em cima do botao
             if button1.collidepoint(events.pos): #cursor aperta o botao
                 click.play()
-                exec(open("main(antigo).py").read())
+                exec(open("main.py").read())
             if button2.collidepoint(events.pos): #cursor aperta o botao
                 click.play()
-                exec(open("menu.py").read())
+                exec(open("menu funcional.py").read())
 
     a,b = pygame.mouse.get_pos()
     if button1.x <= a <= button1.x + largura_botao and button1.y <= b <= button1.y + altura_botao: #cursor em cima do botao
