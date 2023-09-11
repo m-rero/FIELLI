@@ -16,7 +16,7 @@ margin = 100
 tela_largura = tile_size * cols
 tela_comprimento = (tile_size * cols) - 400 + margin
 
-max_levels = 7
+max_levels = 8
 tela = pygame.display.set_mode((tela_largura, tela_comprimento))
 
 # Pontuação
