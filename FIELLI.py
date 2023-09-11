@@ -27,7 +27,7 @@ fonteTitulo = pygame.font.Font('script/fontes/OMORI-GAME2.ttf', 260) #fonte do b
 fontegame = pygame.font.Font('script/fontes/Retro Gaming.ttf ', 60) #fonte do botao
 
 textobotao1 = fontegame.render('START', True, 'white') #renderizar o botao na superficie
-textobotao2 = fontegame.render('OPTIONS', True, 'white')
+textobotao2 = fontegame.render('CREDITS', True, 'white')
 textobotao3 = fontegame.render('QUIT', True, 'white')
 titulo = fonteTitulo.render('FIELLI', True, (255, 180, 24))
 
