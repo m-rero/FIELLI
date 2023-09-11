@@ -17,7 +17,7 @@ pygame.display.set_caption('FIM') #legenda da tela
 #som
 click = pygame.mixer.Sound('sons/click.mp3')
 pygame.mixer.init()
-pygame.mixer.music.load('sons/intro.mp3')
+pygame.mixer.music.load('sons/New_Super_Mario_Bros.mp3')
 pygame.mixer.music.set_volume(0.5)
 pygame.mixer.music.play(-1)
 
@@ -35,10 +35,10 @@ nome3 = fonteNomes.render('Eloise Sophia Lamenha Lins', True, 'white')
 nome4 = fonteNomes.render('Melissa Rego Rodrigues', True, 'white')
 nome5 = fonteNomes.render('Murilo Goncalves de Lucena', True, 'white')
 nome6 = fonteNomes.render('Paula Beatriz Lucas Oliveira', True, 'white')
-thanks = fonteNomes.render('OBRIGADO POR JOGAR!', True, 'white')
+thanks = fonteNomes.render('OBRIGADO POR JOGAR! :3', True, 'white')
 
 textobotao1 = fontegame.render('MENU', True, 'white') #renderizar o botao na superficie
-titulo = fonteTitulo.render('CREDITS', True, (255, 180, 24))
+titulo = fonteTitulo.render('FIM', True, (255, 180, 24))
 
 button1 = pygame.Rect(335, 570, largura_botao, altura_botao) #retangulo do botao posicao, posicao, tamanho largura, tamanho altura
 borderbutton1 = pygame.Rect(330, 565, largura_botao + 10, altura_botao + 10) #da borda
@@ -49,9 +49,9 @@ bg_img_resize = pygame.transform.scale(bg_img,(tela_largura, tela_comprimento))
 while True:
     tela.blit(bg_img_resize, (0, 0))
 
-    tela.blit(titulo, (220, -30)) #titulo
+    tela.blit(titulo, (400, -30)) #titulo
 
-    tela.blit(docente, (230, 150))
+    tela.blit(docente, (250, 150))
     tela.blit(discentes, (430, 220))
     tela.blit(nome1, (300, 250))
     tela.blit(nome2, (300, 280))

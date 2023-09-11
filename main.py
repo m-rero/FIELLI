@@ -15,7 +15,7 @@ margin = 100
 tela_largura = tile_size * cols
 tela_comprimento = (tile_size * cols) - 400 + margin
 
-max_levels = 8
+max_levels = 9
 tela = pygame.display.set_mode((tela_largura, tela_comprimento))
 
 # Pontuação
@@ -442,14 +442,14 @@ while run:
 		5: "Olha onde pisa",
 		6: "''Vai e vem espinhento''",
 		7: "''O Starguy''",
-		8: "PECAS RECOLHIDAS!"
+		8: "PECAS RECOLHIDAS!",
+		9: "Obrigado por jogar! Abraco do Ilmoru! :D"
 	}
 
 	if exibir_mensagem_nivel:
 		fontegame = pygame.font.Font('script/fontes/OMORI-GAME2.ttf ', 50)
 		mensagem = fontegame.render(f"Nivel {level} - {mensagens_nivel.get(level)}", True, (255, 255, 255))
-		tela.blit(mensagem,
-				  (tela_largura // 2 - mensagem.get_width() // 2, tela_comprimento // 2 - mensagem.get_height() // 2))
+		tela.blit(mensagem,(tela_largura // 2 - mensagem.get_width() // 2, tela_comprimento // 2 - mensagem.get_height() // 2))
 		pygame.display.update()
 
 		esperando = True
@@ -513,6 +513,9 @@ while run:
 				world_data = []
 				world = reset_level(level)
 				exibir_mensagem_nivel = True
+
+	if level == 9:
+		exec(open("telaFinal.py").read())
 
 
 	# Colisões com espinhos
