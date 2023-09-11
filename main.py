@@ -61,6 +61,7 @@ pygame.mixer.music.play(-1)
 pulo = pygame.mixer.Sound('sons/cat.mp3')
 click = pygame.mixer.Sound('sons/click.mp3')
 pegar = pygame.mixer.Sound('sons/pick.mp3')
+sucesso = pygame.mixer.Sound('sons/sucess.mp3')
 
 
 # Niveis
@@ -496,11 +497,13 @@ while run:
 		click.play()
 
 	if pontuacao == 5:
+
 		foguete_grupo.empty()
 		foguete_grupo.add(fogueteativo_grupo)
 		colisaofoguete = pygame.sprite.spritecollide(player, foguete_grupo, True)
 		if colisaofoguete and level != max_levels:
-			pygame.time.delay(600)
+			sucesso.play()
+			pygame.time.delay(800)
 			level += 1
 			if level <= max_levels:
 				# Reset level
