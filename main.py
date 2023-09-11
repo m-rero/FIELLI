@@ -60,7 +60,7 @@ pygame.mixer.music.play(-1)
 pulo = pygame.mixer.Sound('sons/cat.mp3')
 click = pygame.mixer.Sound('sons/click.mp3')
 pegar = pygame.mixer.Sound('sons/pick.mp3')
-sucesso = pygame.mixer.Sound('sons/sucess.mp3')
+sucesso = pygame.mixer.Sound('sons/sucess1.mp3')
 
 
 # Niveis
