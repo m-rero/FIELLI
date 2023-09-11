@@ -25,11 +25,11 @@ fontegame = pygame.font.Font('script/fontes/Retro Gaming.ttf ', 60) #fonte do bo
 
 textoBotaoBack = fontegame.render('BACK', True, 'white') #renderizar o botao na superficie
 tituloCreditos = fonteTitulo.render('CREDITS', True, (255, 180, 24))
-nome1 = fonteNomes.render('Melissa Rego Rodrigues', True, 'white')
-nome2 = fonteNomes.render('Murilo Gonçalves de Lucena', True, 'white')
+nome1 = fonteNomes.render('Ana Julia Figueredo Bernardo', True, 'white')
+nome2 = fonteNomes.render('Anna Beatriz Batista Ramos', True, 'white')
 nome3 = fonteNomes.render('Eloise Sophia Lamenha Lins', True, 'white')
-nome4 = fonteNomes.render('Ana Julia Figueredo Bernardo', True, 'white')
-nome5 = fonteNomes.render('Anna Beatriz Batista Ramos', True, 'white')
+nome4 = fonteNomes.render('Melissa Rego Rodrigues', True, 'white')
+nome5 = fonteNomes.render('Murilo Goncalves de Lucena', True, 'white')
 nome6 = fonteNomes.render('Paula Beatriz Lucas Oliveira', True, 'white')
 
 
@@ -44,12 +44,12 @@ while True:
 
     tela.blit(tituloCreditos, (270, 40))
 
-    tela.blit(nome1, (350, 220))
-    tela.blit(nome2, (335, 250))
-    tela.blit(nome3, (330, 280))
-    tela.blit(nome4, (310, 310))
-    tela.blit(nome5, (310, 340))
-    tela.blit(nome6, (320, 370))
+    tela.blit(nome1, (300, 220))
+    tela.blit(nome2, (300, 250))
+    tela.blit(nome3, (300, 280))
+    tela.blit(nome4, (300, 310))
+    tela.blit(nome5, (300, 340))
+    tela.blit(nome6, (300, 370))
 
     for events in pygame.event.get(): #botao back
         if events.type == pygame.QUIT:
