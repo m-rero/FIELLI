@@ -1,4 +1,5 @@
 # Imports
+# Imports
 import pygame
 import pickle
 from os import path
@@ -146,6 +147,8 @@ class World():
 					# foguete
 					foguete = Foguete(col_count * tile_size, row_count * tile_size)
 					foguete_grupo.add(foguete)
+					foguete_ativo = FogueteAtivo(col_count * tile_size, row_count * tile_size)
+					fogueteativo_grupo.add(foguete_ativo)
 
 				col_count += 1
 			row_count += 1
@@ -196,15 +199,24 @@ class Peca(pygame.sprite.Sprite):
 			self.rect.y = y
 
 
+
+class FogueteAtivo(pygame.sprite.Sprite):
+	def __init__(self, x, y):
+		pygame.sprite.Sprite.__init__(self)
+		img = pygame.image.load(f'img/foguete{1}.png')
+		self.image = pygame.transform.scale(img, (tile_size // 0.5, tile_size // 0.5))
+		self.rect = self.image.get_rect()
+		self.rect.x = x
+		self.rect.y = y
+
 class Foguete(pygame.sprite.Sprite):
 	def __init__(self, x, y):
 		pygame.sprite.Sprite.__init__(self)
-		for _ in range(1, 2):
-			img = pygame.image.load(f'img/foguete{2}.png')
-			self.image = pygame.transform.scale(img, (tile_size // 0.5, tile_size // 0.5))
-			self.rect = self.image.get_rect()
-			self.rect.x = x
-			self.rect.y = y
+		img = pygame.image.load(f'img/foguete{2}.png')
+		self.image = pygame.transform.scale(img, (tile_size // 0.5, tile_size // 0.5))
+		self.rect = self.image.get_rect()
+		self.rect.x = x
+		self.rect.y = y
 
 
 class Espinhos(pygame.sprite.Sprite):
@@ -484,15 +496,21 @@ while run:
 		click.play()
 
 	if pontuacao == 5:
-		level += 1
-		if level <= max_levels:
-			# Reset level
-			pontuacao -= 5
-			pygame.time.delay(100)
-			espinhos_grupo.empty()
-			world_data = []
-			world = reset_level(level)
-			exibir_mensagem_nivel = True
+		foguete_grupo.empty()
+		foguete_grupo.add(fogueteativo_grupo)
+		colisaofoguete = pygame.sprite.spritecollide(player, foguete_grupo, True)
+		if colisaofoguete and level != max_levels:
+			pygame.time.delay(600)
+			level += 1
+			if level <= max_levels:
+				# Reset level
+				pontuacao -= 5
+				pygame.time.delay(100)
+				espinhos_grupo.empty()
+				world_data = []
+				world = reset_level(level)
+				exibir_mensagem_nivel = True
+
 
 	# Colisões com espinhos
 	colisoesespinhos = pygame.sprite.spritecollide(player, espinhos_grupo, False)
