@@ -440,8 +440,8 @@ while run:
 		3: "''Picos aranhadores''",
 		4: "Plataformas remexidas",
 		5: "Olha onde pisa",
-		6: "''O Starguy''",
-		7: "''Vai e vem espinhento''",
+		6: "''Vai e vem espinhento''",
+		7: "''O Starguy''",
 		8: "PECAS RECOLHIDAS!"
 	}
 
