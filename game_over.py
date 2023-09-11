@@ -53,7 +53,7 @@ while True:
                 exec(open("main.py").read())
             if button2.collidepoint(events.pos): #cursor aperta o botao
                 click.play()
-                exec(open("menu funcional.py").read())
+                exec(open("FIELLI.py").read())
 
     a,b = pygame.mouse.get_pos()
     if button1.x <= a <= button1.x + largura_botao and button1.y <= b <= button1.y + altura_botao: #cursor em cima do botao

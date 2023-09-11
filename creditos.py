@@ -57,7 +57,7 @@ while True:
         if events.type == pygame.MOUSEBUTTONDOWN: #cursor em cima do botao
             if buttonBack.collidepoint(events.pos): #cursor aperta o botao
                 click.play()
-                exec(open("menu funcional.py").read())
+                exec(open("FIELLI.py").read())
     k,w = pygame.mouse.get_pos()
     if buttonBack.x <= k <= buttonBack.x + largura_botao and buttonBack.y <= w <= buttonBack.y + altura_botao: #cursor em cima do botao
         pygame.draw.rect(tela, (255, 255, 255), borderbuttonBack)

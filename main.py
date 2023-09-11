@@ -441,8 +441,9 @@ while run:
 		3: "''Picos aranhadores''",
 		4: "Plataformas remexidas",
 		5: "Olha onde pisa",
-		6: "Mensagem para nível 6",
+		6: "''O Starguy''",
 		7: "Mensagem para nível 7",
+		8: "PEÇAS RECOLHIDAS!"
 	}
 
 	if exibir_mensagem_nivel:
