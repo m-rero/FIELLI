@@ -1,5 +1,4 @@
 # Imports
-# Imports
 import pygame
 import pickle
 from os import path
@@ -442,8 +441,8 @@ while run:
 		4: "Plataformas remexidas",
 		5: "Olha onde pisa",
 		6: "''O Starguy''",
-		7: "Mensagem para nível 7",
-		8: "PEÇAS RECOLHIDAS!"
+		7: "''Vai e vem espinhento''",
+		8: "PECAS RECOLHIDAS!"
 	}
 
 	if exibir_mensagem_nivel:
@@ -498,11 +497,11 @@ while run:
 		click.play()
 
 	if pontuacao == 5:
-
 		foguete_grupo.empty()
 		foguete_grupo.add(fogueteativo_grupo)
 		colisaofoguete = pygame.sprite.spritecollide(player, foguete_grupo, True)
-		if colisaofoguete and level != max_levels:
+
+		if colisaofoguete:
 			sucesso.play()
 			pygame.time.delay(800)
 			level += 1
