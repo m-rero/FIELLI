@@ -14,11 +14,9 @@ cols = 20
 margin = 100
 tela_largura = tile_size * cols
 tela_comprimento = (tile_size * cols) - 400 + margin
-tela = pygame.display.set_mode((tela_largura, tela_comprimento))
 
-# Váriaveis para níveis e seu número máximo
-level = 1
 max_levels = 9
+tela = pygame.display.set_mode((tela_largura, tela_comprimento))
 
 # Pontuação
 pontuacao = 0
@@ -201,7 +199,7 @@ class Peca(pygame.sprite.Sprite):
 			self.rect.y = y
 
 
-# Classe do Foguete Funcional (Colorido)
+
 class FogueteAtivo(pygame.sprite.Sprite):
 	def __init__(self, x, y):
 		pygame.sprite.Sprite.__init__(self)
@@ -211,7 +209,6 @@ class FogueteAtivo(pygame.sprite.Sprite):
 		self.rect.x = x
 		self.rect.y = y
 
-# Classe do Foguete (Monocromático)
 class Foguete(pygame.sprite.Sprite):
 	def __init__(self, x, y):
 		pygame.sprite.Sprite.__init__(self)
@@ -221,7 +218,7 @@ class Foguete(pygame.sprite.Sprite):
 		self.rect.x = x
 		self.rect.y = y
 
-#Classe dos Espinhos
+
 class Espinhos(pygame.sprite.Sprite):
 	def __init__(self, x, y):
 		pygame.sprite.Sprite.__init__(self)
@@ -230,6 +227,7 @@ class Espinhos(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()
 		self.rect.x = x
 		self.rect.y = y
+
 
 # Jogador
 class Player():
@@ -348,7 +346,6 @@ class Player():
 		# Desenhar jogador na tela
 		tela.blit(self.image, self.rect)
 
-	# Resetar Sprites e Física
 	def reset(self, x, y):
 		frames = []
 		player_scale = 60
@@ -406,9 +403,9 @@ class Player():
 			frame_image_left = pygame.transform.flip(frame_image, True, False)
 			self.frames_jump_left.append(frame_image_left)
 
+
 player = Player(0, 800)
 
-# Lista de Grupos
 plataforma_grupo = pygame.sprite.Group()
 peca_grupo = pygame.sprite.Group()
 foguete_grupo = pygame.sprite.Group()
@@ -536,6 +533,7 @@ while run:
 
 
 	# Reinicie o jogo
+
 	pygame.display.update()
 
 # Música Para
