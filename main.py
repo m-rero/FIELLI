@@ -515,6 +515,7 @@ while run:
 				exibir_mensagem_nivel = True
 
 	if level == 9:
+		level -= 8
 		exec(open("telaFinal.py").read())
 
 
