@@ -24,7 +24,7 @@ fonteNomes = pygame.font.Font('script/fontes/OMORI-GAME2.ttf', 40)
 fontegame = pygame.font.Font('script/fontes/Retro Gaming.ttf ', 60) #fonte do botao
 
 textoBotaoBack = fontegame.render('BACK', True, 'white') #renderizar o botao na superficie
-tituloCreditos = fonteTitulo.render('CREDITS', True, (255, 180, 24))
+tituloCreditos = fonteTitulo.render("DEV's", True, (255, 180, 24))
 nome1 = fonteNomes.render('Ana Julia Figueredo Bernardo', True, 'white')
 nome2 = fonteNomes.render('Anna Beatriz Batista Ramos', True, 'white')
 nome3 = fonteNomes.render('Eloise Sophia Lamenha Lins', True, 'white')
@@ -42,7 +42,7 @@ bg_img_resize = pygame.transform.scale(bg_img,(tela_largura, tela_comprimento))
 while True:
     tela.blit(bg_img_resize, (0, 0))
 
-    tela.blit(tituloCreditos, (270, 40))
+    tela.blit(tituloCreditos, (350, 40))
 
     tela.blit(nome1, (300, 220))
     tela.blit(nome2, (300, 250))
