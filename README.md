@@ -1,6 +1,6 @@
 # PROJETO FIELLI
 
-"FIELLI" é um jogo de plataforma desenvolvido com a biblioteca pygame, em qual um gato astronauta passa por vários níveis em quais deve coletar todos os pontos para completar a fase. Os níveis no jogo podem ser criados pelo nivelMaker, que ao clicar com o botão direito do mouse muda de um dos elementos possíveis para outro.
+"FIELLI" é um jogo de plataforma desenvolvido com a biblioteca pygame, em qual um gato astronauta passa por vários níveis em quais deve coletar todos os pontos para completar a fase. Os níveis no jogo podem ser criados pelo level engine, que ao clicar com o botão direito do mouse muda de um dos elementos possíveis para outro.
 
 
 Integrantes do projeto:
