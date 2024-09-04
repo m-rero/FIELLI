@@ -1,9 +1,6 @@
 # PROJETO FIELLI
 
-"FIELLI" é fruto da vivência da disciplina de PROGRAMAÇÃO I ministrada pelo professor Adauto Trigueiro Almeida Filho, no curso de Bacharelado em Engenharia de Software pela Universidade de Pernambuco (UPE)
-
-
-O jogo tem como únicas finalidades a construção aptidativa do processo criativo dentro da programação, e, a fins avaliativos acerca do 1° Semestre do curso (2023.1).
+"FIELLI" é um jogo de plataforma desenvolvido com a biblioteca pygame, em qual um gato astronauta passa por vários níveis em quais deve coletar todos os pontos para completar a fase. Os níveis no jogo podem ser criados pelo nivelMaker, que ao clicar com o botão direito do mouse muda de um dos elementos possíveis para outro.
 
 
 Integrantes do projeto:
@@ -33,16 +30,3 @@ REQUISITOS BÁSICOS e TUTORIAL:
 TODOS DIREITOS RESERVADOS A CONTEÚDOS DE TERCEIROS
 -
 - NINTENDO®
-
-
-AGRADECIMENTOS
--
-
-FIELLI apesar de ser um jogo em estados modestos, ele é o primeiro passo de um sonho que tenho desde criança, criar coisas, especificamente jogos.
-Agradeço o empenho e cooperação de toda a equipe e todo suporte e supervisão do Docente. Obrigado a todos!
-
-
-
-Por "Ilmoru"
-
-:3
